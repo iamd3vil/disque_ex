@@ -1,6 +1,6 @@
 # DisqueEx
 
-**TODO: Add description**
+Elixir client for Disque message queue. Aims to provide all the commands.
 
 ## Installation
 
