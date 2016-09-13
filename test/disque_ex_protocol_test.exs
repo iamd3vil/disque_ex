@@ -62,4 +62,16 @@ defmodule DisqueExProtocolTest do
     ] ++ queues
     assert command == Protocol.getjob(queues, opts)
   end
+
+  test "acking multiple job ids" do
+    job_ids = ["bMsnbwmqbbmnqw", "dbsmdsmbds"]
+    command = ["ACKJOB"] ++ job_ids
+    assert command == Protocol.ack(job_ids)
+  end
+
+  test "fastacking multiple job ids" do
+    job_ids = ["bMsnbwmqbbmnqw", "dbsmdsmbds"]
+    command = ["FASTACK"] ++ job_ids
+    assert command == Protocol.fastack(job_ids)
+  end
 end

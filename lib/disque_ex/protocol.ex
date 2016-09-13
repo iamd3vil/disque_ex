@@ -3,7 +3,12 @@ defmodule DisqueEx.Protocol do
   Builds commands by taking arguments and options
   """
 
-  @spec addjob(String.t, String.t, integer, Keyword.t) :: [String.t]
+  @typedoc """
+  Command which is a list of binaries
+  """
+  @type command :: [String.t]
+
+  @spec addjob(String.t, String.t, integer, Keyword.t) :: command
   @doc """
   Builds addjob command
   """
@@ -17,7 +22,7 @@ defmodule DisqueEx.Protocol do
     |> Enum.reduce(main_cmd, &build_addjob_command/2)
   end
 
-  @spec getjob([String.t], Keyword.t) :: [String.t]
+  @spec getjob([String.t], Keyword.t) :: command
   @doc """
   Builds getjob command
   """
@@ -31,6 +36,22 @@ defmodule DisqueEx.Protocol do
     |> Enum.reduce(cmd, &build_getjob_command/2)
 
     main_cmd ++ ["FROM"] ++ queues
+  end
+
+  @spec ack([String.t]) :: command
+  @doc """
+  Builds ack command
+  """
+  def ack(job_ids) when is_list(job_ids) do
+    ["ACKJOB"] ++ job_ids
+  end
+
+  @spec fastack([String.t]) :: [String.t]
+  @doc """
+  Builds fast ack command
+  """
+  def fastack(job_ids) when is_list(job_ids) do
+    ["FASTACK"] ++ job_ids
   end
 
 
