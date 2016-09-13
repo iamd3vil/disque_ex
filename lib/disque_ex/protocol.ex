@@ -8,6 +8,8 @@ defmodule DisqueEx.Protocol do
   """
   @type command :: [String.t]
 
+  @type job_id :: String.t
+
   @spec addjob(String.t, String.t, integer, Keyword.t) :: command
   @doc """
   Builds addjob command
@@ -52,6 +54,22 @@ defmodule DisqueEx.Protocol do
   """
   def fastack(job_ids) when is_list(job_ids) do
     ["FASTACK"] ++ job_ids
+  end
+
+  @spec working(job_id) :: {:ok, integer} | {:error, String.t}
+  @doc """
+  Builds working command
+  """
+  def working(job_id) when is_binary(job_id) do
+    ["WORKING"] ++ [job_id]
+  end
+
+  @spec nack([job_id]) :: {:ok, integer} | {:error, String.t}
+  @doc """
+  Builds nack command
+  """
+  def nack(job_ids) when is_list(job_ids) do
+    ["NACK"] ++ job_ids
   end
 
 

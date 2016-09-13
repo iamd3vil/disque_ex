@@ -23,9 +23,9 @@ defmodule DisqueExProtocolTest do
       {:async, true}
     ] # All the options
     command = [
-      "ADDJOB", 
-      queue_name, 
-      job, 
+      "ADDJOB",
+      queue_name,
+      job,
       to_string(timeout),
       "REPLICATE", "2",
       "DELAY", "2",
@@ -73,5 +73,17 @@ defmodule DisqueExProtocolTest do
     job_ids = ["bMsnbwmqbbmnqw", "dbsmdsmbds"]
     command = ["FASTACK"] ++ job_ids
     assert command == Protocol.fastack(job_ids)
+  end
+
+  test "making a job working" do
+    job_id = "job1"
+    command = ["WORKING"] ++ [job_id]
+    assert command == Protocol.working(job_id)
+  end
+
+  test "nacking given job ids" do
+    job_ids = ["job1", "job2"]
+    command = ["NACK"] ++ job_ids
+    assert command == Protocol.nack(job_ids)
   end
 end

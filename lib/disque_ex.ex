@@ -38,7 +38,7 @@ defmodule DisqueEx do
     |> command(conn)
   end
 
-  @spec getjob(pid, [String.t], Keyword.t) :: {:ok, [job]}
+  @spec getjob(pid, [String.t], Keyword.t) :: {:ok, [job] | nil}
   @doc """
   Gets jobs from the given list of queues
   """
@@ -70,6 +70,24 @@ defmodule DisqueEx do
   """
   def fastack(conn, job_ids) when is_list(job_ids) do
     DisqueEx.Protocol.fastack(job_ids)
+    |> command(conn)
+  end
+
+  @spec working(pid, job_id) :: {:ok, integer} | {:error, String.t}
+  @doc """
+  Makes a job working, which disque server tries to postpone the delivery. Re tuns seconds which you likely postponed the job (which is basically like a retry time), under which you have to make the job working again or it will be sent.
+  """
+  def working(conn, job_id) when is_binary(job_id) do
+    DisqueEx.Protocol.working(job_id)
+    |> command(conn)
+  end
+
+  @spec nack(pid, [String.t]) :: {:ok, integer} | {:error, String.t}
+  @doc """
+  Requeues the job for any other consumer to pick it up.
+  """
+  def nack(conn, job_ids) when is_list(job_ids) do
+    DisqueEx.Protocol.nack(job_ids)
     |> command(conn)
   end
 
